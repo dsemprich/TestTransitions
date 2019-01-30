@@ -17,6 +17,7 @@
 package com.example.myapplication.fragment
 
 import android.os.Bundle
+import android.support.transition.ChangeClipBounds
 import android.support.transition.Fade
 import android.support.transition.TransitionSet
 import android.support.v4.app.Fragment
@@ -58,7 +59,7 @@ class GridFragment : Fragment() {
      * navigating back from the grid.
      */
     private fun scrollToPosition() {
-        recyclerView!!.addOnLayoutChangeListener(object : OnLayoutChangeListener {
+        recyclerView?.addOnLayoutChangeListener(object : OnLayoutChangeListener {
             override fun onLayoutChange(
                 v: View,
                 left: Int,
@@ -70,7 +71,7 @@ class GridFragment : Fragment() {
                 oldRight: Int,
                 oldBottom: Int
             ) {
-                recyclerView!!.removeOnLayoutChangeListener(this)
+                recyclerView?.removeOnLayoutChangeListener(this)
                 val layoutManager = recyclerView?.layoutManager
                 val viewAtPosition = layoutManager?.findViewByPosition(MainActivity.currentPosition)
                 // Scroll to position if the view for the current position is null (not currently part of
@@ -90,12 +91,13 @@ class GridFragment : Fragment() {
      */
     private fun prepareTransitions() {
         val transitionSet = TransitionSet()
-        transitionSet.duration = 375
+        transitionSet.duration = 575
         transitionSet.interpolator = FastOutSlowInInterpolator()
         transitionSet.startDelay = 25
         val fade = Fade()
         fade.addTarget(R.id.card_view)
-        transitionSet.addTransition(fade)
+//        transitionSet.addTransition(ChangeClipBounds())
+//        transitionSet.addTransition(fade)
 
         exitTransition = transitionSet
 

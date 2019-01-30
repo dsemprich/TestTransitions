@@ -17,10 +17,7 @@
 package com.example.myapplication.fragment
 
 import android.os.Bundle
-import android.support.transition.ChangeBounds
-import android.support.transition.ChangeClipBounds
-import android.support.transition.ChangeTransform
-import android.support.transition.TransitionSet
+import android.support.transition.*
 import android.support.v4.app.Fragment
 import android.support.v4.app.SharedElementCallback
 import android.support.v4.view.ViewPager
@@ -28,6 +25,8 @@ import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Interpolator
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.adapter.ImagePagerAdapter
@@ -70,12 +69,14 @@ class ImagePagerFragment : Fragment() {
     private fun prepareSharedElementTransition() {
 
         val transitionSet = TransitionSet()
-        transitionSet.duration = 375
-        transitionSet.interpolator = FastOutSlowInInterpolator()
+        transitionSet.duration = 575
+//        transitionSet.interpolator = FastOutSlowInInterpolator()
+        transitionSet.interpolator = AccelerateDecelerateInterpolator()
         transitionSet.ordering = TransitionSet.ORDERING_TOGETHER
-        transitionSet.addTransition(ChangeClipBounds())
-        transitionSet.addTransition(ChangeTransform())
-        transitionSet.addTransition(ChangeBounds())
+//        transitionSet.addTransition(ChangeClipBounds())
+//        transitionSet.addTransition(ChangeTransform())
+//        transitionSet.addTransition(Fade())
+//        transitionSet.addTransition(ChangeBounds())
 
         sharedElementEnterTransition = transitionSet
 
@@ -90,7 +91,7 @@ class ImagePagerFragment : Fragment() {
                     val currentFragment = viewPager?.let {
                         viewPager?.adapter?.instantiateItem(it, MainActivity.currentPosition)
                     } as Fragment
-                    val view = currentFragment.getView() ?: return
+                    val view = currentFragment.view ?: return
 
                     // Map the first shared element name to the child ImageView.
                     sharedElements[names[0]] = view.findViewById(R.id.image)

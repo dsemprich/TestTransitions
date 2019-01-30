@@ -16,6 +16,7 @@
 
 package com.example.myapplication.adapter
 
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.transition.TransitionSet
 import android.support.v4.app.Fragment
@@ -30,6 +31,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
@@ -38,15 +40,14 @@ import java.util.concurrent.atomic.AtomicBoolean
 
 import com.example.myapplication.adapter.ImageData.IMAGE_DRAWABLES
 import com.example.myapplication.fragment.ImagePagerFragment
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
+import java.lang.Exception
 
 /**
  * A fragment for displaying a grid of images.
  */
-class GridAdapter
-/**
- * Constructs a new grid adapter for the given [Fragment].
- */
-    (fragment: Fragment) : RecyclerView.Adapter<GridAdapter.ImageViewHolder>() {
+class GridAdapter(val fragment: Fragment) : RecyclerView.Adapter<GridAdapter.ImageViewHolder>() {
 
     private val requestManager: RequestManager = Glide.with(fragment)
     private val viewHolderListener: ViewHolderListener
@@ -68,7 +69,7 @@ class GridAdapter
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.image_card, parent, false)
-        return ImageViewHolder(view, requestManager, viewHolderListener)
+        return ImageViewHolder( view, viewHolderListener)
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
@@ -131,7 +132,7 @@ class GridAdapter
      * ViewHolder for the grid's images.
      */
     class ImageViewHolder(
-        itemView: View, private val requestManager: RequestManager,
+        itemView: View,
         private val viewHolderListener: ViewHolderListener
     ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
@@ -152,34 +153,22 @@ class GridAdapter
             setImage(adapterPosition)
             // Set the string value of the image resource as the unique transition name for the view.
             ViewCompat.setTransitionName(image, IMAGE_DRAWABLES[adapterPosition].toString())
+//            viewHolderListener.onLoadCompleted(image, adapterPosition)
         }
 
         fun setImage(adapterPosition: Int) {
             // Load the image with Glide to prevent OOM error when the image drawables are very large.
-            requestManager
-                .load(IMAGE_DRAWABLES[adapterPosition])
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any, target: Target<Drawable>,
-                        isFirstResource: Boolean
-                    ): Boolean {
+            Picasso.get().load(IMAGE_DRAWABLES[adapterPosition])
+                .into(image, object : Callback{
+                    override fun onSuccess() {
                         viewHolderListener.onLoadCompleted(image, adapterPosition)
-                        return false
                     }
 
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        model: Any,
-                        target: Target<Drawable>,
-                        dataSource: DataSource,
-                        isFirstResource: Boolean
-                    ): Boolean {
+                    override fun onError(e: Exception?) {
                         viewHolderListener.onLoadCompleted(image, adapterPosition)
-                        return false
                     }
                 })
-                .into(image)
+//            image.scaleType = ImageView.ScaleType.CENTER_CROP
         }
 
         override fun onClick(view: View) {

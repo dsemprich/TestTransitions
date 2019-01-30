@@ -28,6 +28,7 @@ internal object ImageData {
     // Image assets (free for commercial use, no attribution required, from pixabay.com)
     @DrawableRes
     val IMAGE_DRAWABLES = intArrayOf(
+        R.drawable.boba_fett,
         R.drawable.animal_2024172,
         R.drawable.beetle_562035,
         R.drawable.bug_189903,
