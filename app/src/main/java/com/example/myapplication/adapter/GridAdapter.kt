@@ -159,6 +159,8 @@ class GridAdapter(val fragment: Fragment) : RecyclerView.Adapter<GridAdapter.Ima
         fun setImage(adapterPosition: Int) {
             // Load the image with Glide to prevent OOM error when the image drawables are very large.
             Picasso.get().load(IMAGE_DRAWABLES[adapterPosition])
+                .resize(500,500)
+                .centerCrop()
                 .into(image, object : Callback{
                     override fun onSuccess() {
                         viewHolderListener.onLoadCompleted(image, adapterPosition)

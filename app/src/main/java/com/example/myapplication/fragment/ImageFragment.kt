@@ -51,6 +51,8 @@ class ImageFragment : Fragment() {
        // Load the image with Glide to prevent OOM error when the image drawables are very large.
         imageRes?.let {
             Picasso.get().load(imageRes)
+                .resize(500,500)
+                .centerCrop()
                 .into(imageView, object : Callback{
                     override fun onSuccess() {
                         parentFragment?.startPostponedEnterTransition()

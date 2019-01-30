@@ -49,8 +49,8 @@
           android:layout_height="match_parent"
           android:contentDescription="@string/image_description"
           android:src="@drawable/boba_fett"
-          android:scaleY="2.2"
-          android:scaleX="2.2"
+          android:scaleY="2.15"
+          android:scaleX="2.15"
           android:translationY="95dp"
           android:scaleType="centerCrop"/>
 
